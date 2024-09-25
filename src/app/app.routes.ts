@@ -8,11 +8,17 @@ export const routes: Routes = [{
     redirectTo:'home',
     pathMatch: 'full'    
 },{
-    path: 'monster',
-    component: MonsterComponent
-},{
     path: 'home',
     component: MonsterListComponent
+},{
+    path: 'monster',
+    children: [{
+        path: '',
+        component: MonsterComponent
+    },{
+        path: ':id',
+        component: MonsterComponent
+    }]
 },{
     path : '**',
     component: NotFoundComponent
