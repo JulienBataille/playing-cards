@@ -3,105 +3,116 @@ import { Monster } from '../../models/monster.model';
 import { MonsterType } from '../../utils/monster.utils';
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class MonsterService {
 
-  monsters: Monster[] = [];
-  currentIndex: number = 1;
+	monsters: Monster[] = [];
+	currentId: number = 1;
 
-  constructor() {
-    this.load()
-  }
+	constructor() {
+		this.load();
+	}
 
-  private save() {
-    localStorage.setItem('monsters', JSON.stringify(this.monsters))
-  }
+	private save() {
+		localStorage.setItem('monsters', JSON.stringify(this.monsters));
+	}
 
-  private load(){
-    const monsterData = localStorage.getItem('monsters');
-    if (monsterData){
-      this.monsters = JSON.parse(monsterData).map((monsterJSON: any) => Object.assign(new Monster, monsterJSON));
-      this.currentIndex = Math.max(...this.monsters.map(monster => monster.id))
-    } else {
-      this.init();
-      this.save()
-    }
-  }
+	private load() {
+		const monstersData = localStorage.getItem('monsters');
+		if (monstersData) {
+			this.monsters = JSON.parse(monstersData).map((monsterJson: any) => Object.assign(new Monster(), monsterJson));
+			this.currentId = Math.max(...this.monsters.map(monster => monster.id)) + 1;
+		} else {
+			this.init();
+			this.save();
+		}
+	}
 
-  private init (){
-    this.monsters = [];
+	private init() {
 
-    const monster1 = new Monster();
-    monster1.name ="bulbizarre";
-    monster1.hp = 40;
-    monster1.figureCaption ="N°001 Bulbizarre";
-    this.monsters.push(monster1)
+		this.monsters = [];
 
-    const monster2 = new Monster();
-    monster2.name ="carapuce";
-    monster2.image= 'assets/img/carapuce.png';
-    monster2.type = MonsterType.WATER
-    monster2.hp = 30;
-    monster2.figureCaption ="N°002 Carapuce";
-    this.monsters.push(monster2)
+		const monster1 = new Monster();
+		monster1.id = this.currentId;
+		monster1.name = "Pikachu";
+		monster1.image = "assets/img/pikachu.png";
+		monster1.type = MonsterType.ELECTRIC;
+		monster1.hp = 40;
+		monster1.figureCaption = "N°002 Pikachu";
+		this.monsters.push(monster1);
+		this.currentId++;
 
-    const monster3 = new Monster();
-    monster3.name ="pikachu";
-    monster3.image= 'assets/img/pikachu.png';
-    monster3.type = MonsterType.ELECTRIC
-    monster3.hp = 30;
-    monster3.figureCaption ="N°003 Pikachu";
-    this.monsters.push(monster3)
+		const monster2 = new Monster();
+		monster2.id = this.currentId;
+		monster2.name = "carapuce";
+		monster2.image = "assets/img/carapuce.png";
+		monster2.type = MonsterType.WATER;
+		monster2.hp = 60;
+		monster2.figureCaption = "N°003 carapuce";
+		this.monsters.push(monster2);
+		this.currentId++;
 
-    const monster4 = new Monster();
-    monster4.name ="salameche";
-    monster4.image= 'assets/img/salameche.png';
-    monster4.type = MonsterType.FIRE
-    monster4.hp = 30;
-    monster4.figureCaption ="N°004 Salameche";
-    this.monsters.push(monster4)
-  }
+		const monster3 = new Monster();
+		monster3.id = this.currentId;
+		monster3.name = "bulbizarre";
+		monster3.image = "assets/img/bulb.png";
+		monster3.type = MonsterType.PLANT;
+		monster3.hp = 60;
+		monster3.figureCaption = "N°004 Bubulbizarrelb";
+		this.monsters.push(monster3);
+		this.currentId++;
 
-  getAll(): Monster[]{
-    return this.monsters.map(monster => monster.copy());
-  }
+		const monster4 = new Monster();
+		monster4.id = this.currentId;
+		monster4.name = "salameche";
+		monster4.image = "assets/img/salameche.png";
+		monster4.type = MonsterType.FIRE;
+		monster4.hp = 60;
+		monster4.figureCaption = "N°005 salameche";
+		this.monsters.push(monster4);
+		this.currentId++;
+	}
 
-  get(id:number): Monster | undefined{
-    const monster = this.monsters.find(monster => monster.id === id);
-    return monster ? monster.copy(): undefined
-  }
+	getAll() {
+		return this.monsters.map(monster => monster.copy());
+	}
 
-  add(monster: Monster): Monster {
-    const monsterCopy = monster.copy();
+	get(id: number): Monster | undefined {
+		const monster = this.monsters.find(monster => monster.id === id)
+		return monster ? monster.copy() : undefined;
+	}
 
-    monsterCopy.id = this.currentIndex;
-    this.monsters.push(monsterCopy.copy());
-    this.currentIndex++;
-    this.save();
+	add(monster: Monster): Monster {
+		const monsterCopy = monster.copy()
 
-    return monsterCopy;
-  }
+		monsterCopy.id = this.currentId;
+		this.monsters.push(monsterCopy.copy());
+		this.save();
 
-  update(monster: Monster): Monster {
-    const monsterCopy = monster.copy()
+		this.currentId++;
 
-    const monsterIndex= this.monsters.findIndex(originalMonster =>originalMonster.id === monster.id)
-    if(monsterIndex !=-1){
-      this.monsters[monsterIndex] = monsterCopy.copy();
-      this.save();
+		return monsterCopy;
+	}
 
-    }
+	update(monster: Monster): Monster {
+		const monsterCopy = monster.copy();
 
-    return monsterCopy
-  }
+		const monsterIndex = this.monsters.findIndex(monster => monster.id === monsterCopy.id);
+		if (monsterIndex !== -1) {
+			this.monsters[monsterIndex] = monsterCopy.copy();
+			this.save();
+		}
 
-  delete(id:number){
-    const monsterIndex= this.monsters.findIndex(originalMonster =>originalMonster.id === id)
+		return monsterCopy;
+	}
 
-    if (monsterIndex !=-1)
-      this.monsters.splice(monsterIndex,1);
-      this.save();
+	delete(id: number) {
+		const monsterIndex = this.monsters.findIndex(monster => monster.id === id);
+		if (monsterIndex !== -1) {
+			this.monsters.splice(monsterIndex, 1);
+			this.save();
+		}
+	}
 
-  }
 }

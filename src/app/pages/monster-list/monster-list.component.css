@@ -11,7 +11,11 @@ h1 {
     justify-content: center;
 }
 
-.center{
+.centered{
     margin-top: 40px;
     text-align: center;
+}
+
+app-playing-card{
+    cursor: pointer;
 }
