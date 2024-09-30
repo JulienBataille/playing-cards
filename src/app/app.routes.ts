@@ -1,3 +1,4 @@
+import { isLoggedInGuard } from './guards/is-logged-in.guard';
 import { Routes } from '@angular/router';
  import { MonsterListComponent } from './pages/monster-list/monster-list.component';
  import { MonsterComponent } from './pages/monster/monster.component';
@@ -10,7 +11,8 @@ import { Routes } from '@angular/router';
  	pathMatch: 'full'
  },{
  	path: 'home',
- 	component: MonsterListComponent
+ 	component: MonsterListComponent,
+	canActivate: [isLoggedInGuard]
 },{
  	path: 'login',
  	component: LoginComponent
@@ -18,10 +20,14 @@ import { Routes } from '@angular/router';
  	path: 'monster',
  	children: [{
  		path: '',
- 		component: MonsterComponent
+ 		component: MonsterComponent,
+		canActivate: [isLoggedInGuard]
+
  	}, {
  		path: ':monster',
- 		component: MonsterComponent
+ 		component: MonsterComponent,
+		canActivate: [isLoggedInGuard]
+
  	}]
  }, {
  	path: '**',

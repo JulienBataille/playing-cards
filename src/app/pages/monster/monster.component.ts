@@ -49,8 +49,8 @@ export class MonsterComponent implements OnInit, OnDestroy {
 			this.monster = Object.assign(new Monster(), data);
 		});
 		this.routeSubscription = this.route.params.subscribe(params => {
-			if (params['id']) {
-				this.monsterId = parseInt(params['id']);
+			if (params['monster']) {
+				this.monsterId = parseInt(params['monster']);
 				const monsterFound = this.monsterService.get(this.monsterId);
 				if (monsterFound) {
 					this.monster = monsterFound;
