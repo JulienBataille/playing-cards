@@ -24,7 +24,7 @@ export class LoginService {
  
   login(credentials: Credentials): Observable<User |null |undefined>{
 
-    return this.http.post(this.BASE_URL + 'sessions/login/',credentials).pipe(
+    return this.http.post(this.BASE_URL + '/sessions/login/',credentials).pipe(
       tap((result: any) => {
         localStorage.setItem('token', result['token']);
         const user = Object.assign(new User(), result['user']);
