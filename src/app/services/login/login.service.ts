@@ -36,4 +36,28 @@ export class LoginService {
     )
 
   }
+  
+  getUsers(): Observable<User | null | undefined> {
+    return this.http.get(this.BASE_URL+'/sessions/me/').pipe(
+      tap((result: any) =>{
+        const user = Object.assign(new User(), result);
+        this.user.set(user);
+      }),
+      map((reuslt: any) =>{
+        return this.user()
+      })
+    )
+  }
+
+  logout(): Observable<null> {
+    return this.http.get(this.BASE_URL + '/sessions/logout/').pipe(
+      tap((result:any) => {
+        localStorage.removeItem('token');
+        this.user.set(null)
+      })
+    )
+  }
+
+
+
 }
