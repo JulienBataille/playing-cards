@@ -1,18 +1,31 @@
+import { IMonster } from "../interfaces/monster.interface";
 import { MonsterType } from "../utils/monster.utils";
 
-export class Monster{
+export class Monster implements IMonster {
 
-    id : number = -1;
-    name:string ="My Monster";
-    image: string = "assets/img/bulb.png";
-    type: MonsterType = MonsterType.PLANT;
-    hp: number = 40;
-    figureCaption:string = "N°001 Monster";
-    attackName:string = "Geo Impact";
-    attackStrength: number = 60;
-    attackDescription:string = "This is a long description of a monster capacity Probably something to do with grass."
+	id: number = -1;
+	name: string = "Monster";
+	image: string = "assets/img/pik.png"
+	type: MonsterType = MonsterType.ELECTRIC;
+	hp: number = 60;
+	figureCaption: string = "N°001 Monster";
 
-    copy(): Monster {
-        return Object.assign(new Monster(), this);
-    }
+	attackName: string = "Standard Attack";
+	attackStrength: number = 10;
+	attackDescription: string = "This is an attack description...";
+
+	copy(): Monster {
+		return Object.assign(new Monster(), this);
+	}
+
+	static fromJson(monsterData: IMonster) {
+		return Object.assign(new Monster(), monsterData);
+	}
+
+	toJson(): IMonster {
+		const jsonObject: IMonster = Object.assign({}, this);
+		delete jsonObject.id;
+		return jsonObject;
+	}
+
 }
